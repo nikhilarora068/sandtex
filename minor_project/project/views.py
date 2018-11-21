@@ -36,12 +36,14 @@ def about(request):
 
 @login_required
 def compile(request):
-    os.system("pdflatex minor.tex")
+    #os.system("pdflatex minor.tex")
+    os.system("pdflatex -interaction=nonstopmode minor.tex")
     os.remove('minor' + '.aux')
     os.remove('minor' + '.log')
     os.remove('static/minor.pdf')
     shutil.move("minor.pdf", "static/")
     return HttpResponse('success')
+
 
 def pdf_viewer(request):
     #os.system("python preview.py")
