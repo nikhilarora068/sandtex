@@ -1,0 +1,178 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
+}
+</style>
+
+
+<div class="container-fluid h-100" >
+
+  <div class="row">
+    <ul class="actions fit">
+      <li><a href="{% url 'new_file' %}"><button class="button primary fit small" id="newfile_btn">New</button></a></li>
+      <li><a href="#"><button class="button primary fit small" id="delete_btn">Delete</button></a></li>
+      <li><a href="{% url 'save' %}"><button class="button primary fit small" id="save_btn">Save</button></a></li>
+      <li><a href="#"><button class="button primary fit small" id="compile_btn">Compile</button></a></li>
+      <li><a href="#"><button class="button primary fit small" id="save_btn">Share</button></a></li>
+
+    </ul>
+  </div>
+
+  <div class="row justify-content-center h-100 text-left">
+    <div class="col-1.5">
+       {% for file in instance %}
+         <ul class="actions">
+            <li><a href="{% url 'detail' file.id %}" class=""><strong>{{ file.title }}</strong></a></li>
+         </ul>
+       {% endfor %}
+    </div>
+
+    <div class="col" id="editor">
+test
+    </div>
+
+    <div class="col">
+      <iframe id="frame" src='{% static "nikhil.pdf" %}' width="100%" height="100%"></iframe>
+    </div>
+
+  </div>
+
+</div>
+
+<script type="text/javascript">
+
+
+
+  function init() {
+      //// Initialize Firebase.
+      //// TODO: replace with your Firebase project configuration.
+      var config = {
+        apiKey: "AIzaSyC_hzmcPI7VA7mFmpDmiiUUDn7cy9-TqK8",
+        authDomain: "sandtex.firebaseapp.com",
+        databaseURL: "https://sandtex.firebaseio.com"
+      };
+      firebase.initializeApp(config);
+
+      //// Get Firebase Database reference.
+      var firepadRef = getExampleRef();
+
+      //// Create CodeMirror (with lineWrapping on).
+      var editor = ace.edit("editor");
+      editor.setTheme("ace/theme/textmate");
+      var session = editor.getSession();
+      session.setUseWrapMode(true);
+      session.setUseWorker(false);
+      session.setMode("ace/mode/javascript");
+
+      //// Create Firepad (with rich text toolbar and shortcuts enabled).
+      // var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
+      //     { richTextToolbar: true, richTextShortcuts: true });
+
+      //// Initialize contents.
+      var firepad = Firepad.fromACE(firepadRef, editor, {
+        defaultText: 'test'
+      });
+    }
+
+    function getExampleRef() {
+      var ref = firebase.database().ref();
+      var hash = window.location.hash.replace(/#/g, '');
+      if (hash) {
+        ref = ref.child(hash);
+      } else {
+        ref = ref.push(); // generate unique location.
+        window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
+      }
+      if (typeof console !== 'undefined') {
+        console.log('Firebase data: ', ref.toString());
+      }
+      return ref;
+    }
+
+  // ace.require("ace/ext/language_tools");
+	//   var editor = ace.edit("editor");
+  //     editor.setShowPrintMargin(false);
+  //     editor.getSession().setMode("ace/mode/tex");
+      // editor.setOptions({
+      //   enableBasicAutocompletion: true,
+      //   enableSnippets: true,
+      //   enableLiveAutocompletion: true
+      // });
+
+
+
+
+
+
+function saveContent(){
+    var code =editor.getSession().getValue();
+    var file_name = prompt("Please enter the file name:");
+    var pk = 1;
+    var URL = "{% url 'save' %}";
+    var data = {'code': code,
+                'name': file_name};
+    $.post(URL, data, function(response){
+        if(response === 'success'){ window.location.reload(); }
+        else{ alert('Error! :('); }
+    });
+  }
+    $(document).ready(function(){
+    $('#save_btn').click(function(editor){
+        // editor.preventDefault();
+        // var pk = "{{instance.pk}}"
+        saveContent();
+    });
+});
+
+
+function newFileName(){
+  var file_name = prompt("Please enter the file name:");
+  var URL = "{% url 'new_file' %}";
+  var data = {'name': file_name};
+
+  $.post(URL, data, function(response){
+    if(response === 'success'){ window.location.reload(); }
+    else{ alert('Error! :('); }
+  });
+}
+    $(document).ready(function(){
+    $('#newfile_btn').click(function(){
+        newFileName();
+    });
+});
+
+
+
+function compile(){
+    var URL = "{% url 'compile' %}";
+    $.post(URL, function(response){
+        if(response === 'success'){
+          document.getElementById('frame').contentDocument.location.reload(true); }
+        else{ alert('Error! :('); }
+    });
+  }
+    $(document).ready(function(){
+    $('#compile_btn').click(function(editor){
+        editor.preventDefault();
+        compile();
+    });
+});
+
+// function deleteFile(){
+//   var URL = "{% url 'delete_file' %}";
+//   var pk = 1;
+//   var data = {'id': pk};
+//
+//   $.post(URL, data, function(response){
+//     if(response === 'success'){  }
+//     else{ alert('Error! :('); }
+//   });
+// }
+
+
+</script>
+{% endblock %}

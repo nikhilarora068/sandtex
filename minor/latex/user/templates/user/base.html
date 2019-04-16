@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE HTML>
+<!--
+	Industrious by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>Online Latex Editor</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link rel="stylesheet" href='{% static "/assets/css/main.css" %}' />
+
+		<!-- Firebase -->
+  	<script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
+
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+		<!-- Ace -->
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/mode-javascript.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/theme-textmate.js"></script>
+		<script src="https://ajaxorg.github.io/ace-builds/src/ext-language_tools.js"></script>
+		<script src="https://ajaxorg.github.io/ace-builds/src/ext-emmet.js"></script>
+
+
+		<!-- Firepad -->
+	  <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
+	  <script src="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js"></script>
+
+
+	</head>
+	<body class="is-preload" onload="init()">
+
+		<!-- Header -->
+			<header id="header">
+				<a class="logo" href="{% url 'home' %}">SandTeX</a>
+				<nav>
+					<a href="#menu">Menu</a>
+				</nav>
+			</header>
+
+		<!-- Nav -->
+			<nav id="menu">
+				<ul class="links">
+					{% if user.is_authenticated %}
+						<li><a href="{% url 'home' %}">Home</a></li>
+						<li><a href="{% url 'logout' %}">Logout</a></li>
+						<li><a href="{% url 'editor_window' %}">Editor</a></li>
+					{% else %}
+						<li><a href="{% url 'home' %}">Home</a></li>
+						<li><a href="{% url 'login' %}">Login</a></li>
+						<li><a href="{% url 'registration' %}">Register</a></li>
+						{% endif %}
+				</ul>
+			</nav>
+
+			<!-- <div class="container-fluid"> -->
+				{% block content %}
+
+	      {% endblock %}
+			<!-- </div> -->
+
+
+
+		<!-- Scripts -->
+			<script src='{% static "assets/js/jquery.min.js" %}'></script>
+			<script src='{% static "assets/js/browser.min.js" %}'></script>
+			<script src='{% static "assets/js/breakpoints.min.js" %}'></script>
+			<script src='{% static "assets/js/util.js" %}'></script>
+			<script src='{% static "assets/js/main.js" %}'></script>
+
+	</body>
+</html>

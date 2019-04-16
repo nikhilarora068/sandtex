@@ -1,0 +1,132 @@
+{% extends 'user/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
+}
+</style>
+
+
+<div class="container-fluid h-100" >
+
+  <div class="row">
+    <ul class="actions fit">
+      <li><a href="{% url 'new_file'%}"><button class="button primary fit small" id="newfile_btn"">New</button></a></li>
+      <li><a href="#"><button class="button primary fit small" id="delete_btn">Delete</button></a></li>
+      <li><a href="{% url 'save' %}"><button class="button primary fit small" id="save_btn">Save</button></a></li>
+      <li><a href="#"><button class="button primary fit small" id="compile_btn">Compile</button></a></li>
+      <li><a href="#"><button class="button primary fit small">Share</button></a></li>
+    </ul>
+  </div>
+
+  <div class="row justify-content-center h-100 text-left">
+    <div class="col-1.5">
+       {% for file in files %}
+         <ul class="actions">
+           {% if file.id == instance.id %}
+              <li><a href="{% url 'detail' file.id %}" class=""><strong><mark class="text-light bg-danger">{{ file.title }}</mark></strong></a></li>
+           {% else %}
+              <li><a href="{% url 'detail' file.id %}" class=""><strong>{{ file.title }}</strong></a></li>
+           {% endif %}
+         </ul>
+       {% endfor %}
+    </div>
+
+    <div class="col" id="editor">
+        {{ instance.content }}
+    </div>
+
+    <div class="col">
+      <iframe id="frame" src='{% static "nikhil.pdf" %}' width="100%" height="100%"></iframe>
+    </div>
+
+  </div>
+
+</div>
+
+<script type="text/javascript">
+  ace.require("ace/ext/language_tools");
+	  var editor = ace.edit("editor");
+      editor.setShowPrintMargin(false);
+      editor.getSession().setMode("ace/mode/tex");
+      // editor.setOptions({
+      //   enableBasicAutocompletion: true,
+      //   enableSnippets: true,
+      //   enableLiveAutocompletion: true
+      // });
+
+
+
+
+
+
+function saveContent(pk){
+    var code =editor.getSession().getValue();
+    var pk = {{instance.id}}
+    var URL = "{% url 'save' %}";
+    var data = {'code': code,
+                'id': pk};
+    $.post(URL, data, function(response){
+        if(response === 'success'){ alert('Yay!'); }
+        else{ alert('Error! :('); }
+    });
+  }
+    $(document).ready(function(){
+    $('#save_btn').click(function(editor){
+        editor.preventDefault();
+        saveContent();
+    });
+});
+
+
+function newFileName(){
+  var file_name = prompt("Please enter the file name:");
+  var URL = "{% url 'new_file' %}";
+  var data = {'name': file_name};
+
+  $.post(URL, data, function(response){
+    if(response === 'success'){ window.location.reload() }
+    else{ alert('Error! :('); }
+  });
+  reload();
+}
+  $(document).ready(function(){
+  $('#newfile_btn').click(function(){
+    newFileName();
+  });
+});
+
+
+
+function compile(){
+    var URL = "{% url 'compile' %}";
+    $.post(URL, function(response){
+        if(response === 'success'){
+          document.getElementById('frame').contentDocument.location.reload(true); }
+        else{ alert('Error! :('); }
+    });
+  }
+    $(document).ready(function(){
+    $('#compile_btn').click(function(editor){
+        editor.preventDefault();
+        compile();
+    });
+});
+
+// function deleteFile(){
+//   var URL = "{% url 'delete_file' %}";
+//   var pk = {{instance.id}};
+//   var data = {'id': pk};
+//
+//   $.post(URL, data, function(response){
+//     if(response === 'success'){ window.location.reload(); }
+//     else{ alert('Error! :('); }
+//   });
+// }
+
+</script>
+{% endblock %}
