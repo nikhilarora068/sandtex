@@ -3,9 +3,7 @@
       //// Initialize Firebase.
       //// TODO: replace with your Firebase project configuration.
       var config = {
-        apiKey: "AIzaSyC_hzmcPI7VA7mFmpDmiiUUDn7cy9-TqK8",
-        authDomain: "sandtex.firebaseapp.com",
-        databaseURL: "https://sandtex.firebaseio.com"
+      
       };
       firebase.initializeApp(config);
 
