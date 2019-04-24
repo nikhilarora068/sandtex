@@ -1,0 +1,66 @@
+{% extends "user/base.html" %}
+{% load static %}
+{% block content %}
+
+
+
+<head>
+  <meta charset="utf-8" />
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
+
+  <!-- Ace -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/mode-javascript.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/theme-textmate.js"></script>
+
+  <!-- Firepad -->
+  <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
+  <script src="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js"></script>
+
+
+  <link rel="stylesheet" type="text/css" href="{% static 'editor.css'%}">
+</head>
+
+<body onload="init()">
+
+  <div class="container-fluid h-100 ">
+
+    <div class="row">
+      <ul class="actions fit">
+        <li><a href="{% url 'new_file' %}"><button class="button primary fit small" id="newfile_btn">New</button></a></li>
+        <li><a href="#"><button class="button primary fit small" id="delete_btn">Delete</button></a></li>
+        <li><a href="{% url 'save' %}"><button class="button primary fit small" id="save_btn">Save</button></a></li>
+        <li><a href="#"><button class="button primary fit small" id="compile_btn">Compile</button></a></li>
+
+      </ul>
+    </div>
+
+    <div class="row justify-content-center h-100 text-left" >
+      <div class="col-1.5">
+         {% for file in files %}
+           <ul class="actions">
+             {% if file.id == instance.id %}
+                <li><a href="{% url 'detail' file.id %}" class=""><strong><mark class="text-light bg-danger">{{ file.title }}</mark></strong></a></li>
+             {% endif %}
+           </ul>
+         {% endfor %}
+      </div>
+
+        <div class="col-sm-5 h-100" id="firepad-container" >{{ instance.content }}</div>
+
+      <div class="col-sm-5" id="pdf">
+        <iframe id="frame" src='{% static "nikhil.pdf" %}' width="100%" height="100%"></iframe>
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+
+
+  <script type="text/javascript" src="{% static 'editor.js'%}"></script>
+</body>
+{% endblock %}

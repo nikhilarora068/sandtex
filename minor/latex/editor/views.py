@@ -10,7 +10,7 @@ from latex import settings
 
 
 
-@login_required
+# @login_required
 def editor_window(request):
     context = {
     'instance': File.objects.all().filter(author=request.user)
@@ -20,7 +20,7 @@ def editor_window(request):
 
 
 
-@login_required
+# @login_required
 def detail_view(request, pk=1):
     id = pk
     #print(id)
@@ -34,6 +34,25 @@ def detail_view(request, pk=1):
     }
 
     return render(request, 'editor/file_detail.html', context)
+
+
+
+@csrf_exempt
+def sharing(request, pk=1):
+    id = pk
+    #print(id)
+    files = File.objects.all().filter(author=request.user);
+    objects = files.get(pk=id)
+    #print(objects)
+    #print(objects.content)
+    context = {
+        'instance': objects,
+        'files': files
+    }
+
+    return render(request, 'share/sharing_window.html', context)
+
+
 
 
 
@@ -59,7 +78,7 @@ def save_content(request):
             #instance = File.objects.get(pk=pk)
 
             #print(instance.title)
-#            print(f'file data = {file_data}')
+            #print(f'file data = {file_data}')
             # doSomething with pieFact here...
         # print(f'file name is {file_name}')
         # if file_name == ""

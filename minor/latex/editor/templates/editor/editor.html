@@ -17,7 +17,7 @@ html, body {
       <li><a href="#"><button class="button primary fit small" id="delete_btn">Delete</button></a></li>
       <li><a href="{% url 'save' %}"><button class="button primary fit small" id="save_btn">Save</button></a></li>
       <li><a href="#"><button class="button primary fit small" id="compile_btn">Compile</button></a></li>
-      <li><a href="#"><button class="button primary fit small" id="save_btn">Share</button></a></li>
+
 
     </ul>
   </div>
@@ -31,12 +31,29 @@ html, body {
        {% endfor %}
     </div>
 
-    <div class="col" id="editor">
-test
+    <div class="col" id="editor">\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+
+\title{Bibliography management: BibTeX}
+\author{Share\LaTeX}
+
+\begin{document}
+
+\maketitle
+
+This document is an example of BibTeX using in bibliography management. Three items are cited: \textit{The \LaTeX\ Companion} book \cite{latexcompanion}, the Einstein journal paper \cite{einstein}, and the Donald Knuth's website \cite{knuthwebsite}. The \LaTeX\ related items are \cite{latexcompanion,knuthwebsite}.
+
+\medskip
+
+\bibliographystyle{unsrt}%Used BibTeX style is unsrt
+\bibliography{sample}
+
+\end{document}
+
     </div>
 
     <div class="col">
-      <iframe id="frame" src='{% static "nikhil.pdf" %}' width="100%" height="100%"></iframe>
+      <iframe id="frame" src='{% static "default.pdf" %}' width="100%" height="100%"></iframe>
     </div>
 
   </div>
@@ -45,53 +62,12 @@ test
 
 <script type="text/javascript">
 
-
-
-  function init() {
-      //// Initialize Firebase.
-      //// TODO: replace with your Firebase project configuration.
-      var config = {
-        apiKey: "AIzaSyC_hzmcPI7VA7mFmpDmiiUUDn7cy9-TqK8",
-        authDomain: "sandtex.firebaseapp.com",
-        databaseURL: "https://sandtex.firebaseio.com"
-      };
-      firebase.initializeApp(config);
-
-      //// Get Firebase Database reference.
-      var firepadRef = getExampleRef();
-
-      //// Create CodeMirror (with lineWrapping on).
-      var editor = ace.edit("editor");
-      editor.setTheme("ace/theme/textmate");
-      var session = editor.getSession();
-      session.setUseWrapMode(true);
-      session.setUseWorker(false);
-      session.setMode("ace/mode/javascript");
-
-      //// Create Firepad (with rich text toolbar and shortcuts enabled).
-      // var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
-      //     { richTextToolbar: true, richTextShortcuts: true });
-
-      //// Initialize contents.
-      var firepad = Firepad.fromACE(firepadRef, editor, {
-        defaultText: 'test'
-      });
-    }
-
-    function getExampleRef() {
-      var ref = firebase.database().ref();
-      var hash = window.location.hash.replace(/#/g, '');
-      if (hash) {
-        ref = ref.child(hash);
-      } else {
-        ref = ref.push(); // generate unique location.
-        window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
-      }
-      if (typeof console !== 'undefined') {
-        console.log('Firebase data: ', ref.toString());
-      }
-      return ref;
-    }
+  var editor = ace.edit("editor");
+  editor.setTheme("ace/theme/textmate");
+  var session = editor.getSession();
+  session.setUseWrapMode(true);
+  session.setUseWorker(false);
+  session.setMode("ace/mode/tex");
 
   // ace.require("ace/ext/language_tools");
 	//   var editor = ace.edit("editor");
