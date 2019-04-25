@@ -14,7 +14,7 @@
       var editor = ace.edit("firepad-container");
       editor.setTheme("ace/theme/textmate");
       var session = editor.getSession();
-      session.setUseWrapMode(false);
+      session.setUseWrapMode(true);
       session.setUseWorker(false);
       session.setMode("ace/mode/tex");
 
@@ -23,9 +23,9 @@
       //     { richTextToolbar: true, richTextShortcuts: true });
 
       //// Initialize contents.
-
-      var firepad = Firepad.fromACE(firepadRef, editor);
-      firepad.setText('{{ instance.content }}')
+      var firepad = Firepad.fromACE(firepadRef, editor, {
+        defaultText: '{{ instance.content }}'
+      });
     }
 
     // Helper to get hash from end of URL or generate a random one.

@@ -10,10 +10,15 @@ from latex import settings
 
 
 
+
 # @login_required
 def editor_window(request):
+    all_user_files = File.objects.all().filter(author=request.user)
+    no_of_files = len(all_user_files)
+
     context = {
-    'instance': File.objects.all().filter(author=request.user)
+        'count': no_of_files,
+        'all_files': all_user_files
     }
     return render(request, 'editor/editor.html', context)
 
@@ -28,9 +33,28 @@ def detail_view(request, pk=1):
     objects = files.get(pk=id)
     #print(objects)
     #print(objects.content)
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    destination = os.path.join(BASE_DIR, "static")
+    pdfname = str(request.user) + '.pdf'
+
+    all_files = os.listdir(destination)
+
+    if any(pdfname in s for s in all_files):
+        file_status = 1
+    else:
+        file_status = 0
+
+    print(all_files)
+    print(pdfname)
+    print(file_status)
+
+
+    destination = os.path.join(destination, pdfname)
+
     context = {
         'instance': objects,
-        'files': files
+        'files': files,
+        'status': file_status
     }
 
     return render(request, 'editor/file_detail.html', context)
@@ -91,9 +115,11 @@ def save_content(request):
         with open(filename, 'w') as file:
             file.write(file_data)
 
-        return HttpResponse('success') # if everything is OK
+        return HttpResponse('success')
+        # new_file = File.objects.all().filter(author=request.user).order_by("-id")[0]
+        # detail_view(request, new_file.id) # if everything is OK
     # nothing went well
-    return HttpResponse('FAIL!!!!!')
+    # return HttpResponse('FAIL!!!!!')
 
 
 
@@ -108,7 +134,7 @@ def new_file_name(request):
             #print(filename)
         return HttpResponse('success')
 
-    return HttpResponse('FAIL!!!!!')
+    # return HttpResponse('FAIL!!!!!')
 
 
 
@@ -138,8 +164,16 @@ def compile(request):
 
     filename = filename + '/' + str(request.user) + '.tex'
     os.system("pdflatex -interaction=nonstopmode " + filename)
-    # os.remove(str(request.user) + '.aux')
-    # os.remove(str(request.user) + '.log')
+    os.remove(str(request.user) + '.aux')
+    os.remove(str(request.user) + '.log')
     # os.remove('static/' + str(request.user) + '.pdf')
-    # shutil.move(str(request.user) + '.pdf', 'static/')
+
+    pdfname = str(request.user) + '.pdf'
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # print(BASE_DIR)
+
+    source = BASE_DIR
+    destination = os.path.join(BASE_DIR, "static")
+    shutil.move(os.path.join(source, pdfname), os.path.join(destination, pdfname))
+    #shutil.move(str(request.user) + '.pdf', 'static/')
     return HttpResponse('success')

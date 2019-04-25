@@ -13,50 +13,61 @@ html, body {
 
   <div class="row">
     <ul class="actions fit">
-      <li><a href="{% url 'new_file' %}"><button class="button primary fit small" id="newfile_btn">New</button></a></li>
-      <li><a href="#"><button class="button primary fit small" id="delete_btn">Delete</button></a></li>
-      <li><a href="{% url 'save' %}"><button class="button primary fit small" id="save_btn">Save</button></a></li>
-      <li><a href="#"><button class="button primary fit small" id="compile_btn">Compile</button></a></li>
-
-
+      {% if count %}
+        <li><a href="{% url 'new_file' %}"><button class="button primary fit small" onclick="newFileName()">New</button></a></li>
+        <li><a href="#"><button class="button primary fit small" id="delete_btn">Delete</button></a></li>
+      {% elif not count %}
+        <li><a href="{% url 'new_file' %}"><button class="button primary fit small" onclick="newFileName()">New</button></a></li>
+        <li><a href="{% url 'save' %}"><button class="button primary fit small" onclick="saveContent()">Save</button></a></li>
+      {% endif %}
     </ul>
+
   </div>
+    {% if count %}
+      <div class="row justify-content-center h-100 text-left">
+        <div class="col justify-content-center w-100">
+           {% for file in all_files %}
+             <ul class="actions">
+                  <li><a href="{% url 'detail' file.id %}" ><strong>{{ file.title }}</strong></a></li>
+             </ul>
+           {% endfor %}
+        </div>
+      </div>
 
-  <div class="row justify-content-center h-100 text-left">
-    <div class="col-1.5">
-       {% for file in instance %}
-         <ul class="actions">
-            <li><a href="{% url 'detail' file.id %}" class=""><strong>{{ file.title }}</strong></a></li>
-         </ul>
-       {% endfor %}
-    </div>
-
-    <div class="col" id="editor">\documentclass[a4paper,10pt]{article}
+    {% else %}
+      <div class="row justify-content-center h-100 text-left">
+          <div class="col-1.5"></div>
+          <div class="col" id="editor">\documentclass{article}
 \usepackage[utf8]{inputenc}
 
-\title{Bibliography management: BibTeX}
-\author{Share\LaTeX}
+\title{Galaxy}
+\date{October 2018}
+
+\usepackage{natbib}
+\usepackage{graphicx}
 
 \begin{document}
 
 \maketitle
 
-This document is an example of BibTeX using in bibliography management. Three items are cited: \textit{The \LaTeX\ Companion} book \cite{latexcompanion}, the Einstein journal paper \cite{einstein}, and the Donald Knuth's website \cite{knuthwebsite}. The \LaTeX\ related items are \cite{latexcompanion,knuthwebsite}.
+\section{Introduction}
+There is a theory which states that if ever anyone discovers exactly what the Universe is for and why it is here, it will instantly dbizarre and inexplicable.
+There is another theory which states that this has already happened.
+nikhil
 
-\medskip
+\section{Conclusion}
+``I always thought something was fundamentally wrong with the universe'' \citep{adams1995hitchhiker}
 
-\bibliographystyle{unsrt}%Used BibTeX style is unsrt
-\bibliography{sample}
-
+\bibliographystyle{plain}
+\bibliography{references}
 \end{document}
 
-    </div>
-
-    <div class="col">
-      <iframe id="frame" src='{% static "default.pdf" %}' width="100%" height="100%"></iframe>
-    </div>
-
   </div>
+          <div class="col">
+            <iframe id="frame" src="{% static 'default.pdf' %}" width="100%" height="100%"></iframe>
+          </div>
+      </div>
+    {% endif %}
 
 </div>
 
@@ -87,7 +98,6 @@ This document is an example of BibTeX using in bibliography management. Three it
 function saveContent(){
     var code =editor.getSession().getValue();
     var file_name = prompt("Please enter the file name:");
-    var pk = 1;
     var URL = "{% url 'save' %}";
     var data = {'code': code,
                 'name': file_name};
@@ -96,58 +106,18 @@ function saveContent(){
         else{ alert('Error! :('); }
     });
   }
-    $(document).ready(function(){
-    $('#save_btn').click(function(editor){
-        // editor.preventDefault();
-        // var pk = "{{instance.pk}}"
-        saveContent();
-    });
-});
 
 
 function newFileName(){
-  var file_name = prompt("Please enter the file name:");
-  var URL = "{% url 'new_file' %}";
-  var data = {'name': file_name};
+    var file_name = prompt("Please enter the file name:");
+    var URL = "{% url 'new_file' %}";
+    var data = {'name': file_name};
 
-  $.post(URL, data, function(response){
-    if(response === 'success'){ window.location.reload(); }
-    else{ alert('Error! :('); }
-  });
-}
-    $(document).ready(function(){
-    $('#newfile_btn').click(function(){
-        newFileName();
-    });
-});
-
-
-
-function compile(){
-    var URL = "{% url 'compile' %}";
-    $.post(URL, function(response){
-        if(response === 'success'){
-          document.getElementById('frame').contentDocument.location.reload(true); }
-        else{ alert('Error! :('); }
+    $.post(URL, data, function(response){
+      if(response === 'success'){ window.location.reload(); }
+      else{ alert('Error! :('); }
     });
   }
-    $(document).ready(function(){
-    $('#compile_btn').click(function(editor){
-        editor.preventDefault();
-        compile();
-    });
-});
-
-// function deleteFile(){
-//   var URL = "{% url 'delete_file' %}";
-//   var pk = 1;
-//   var data = {'id': pk};
-//
-//   $.post(URL, data, function(response){
-//     if(response === 'success'){  }
-//     else{ alert('Error! :('); }
-//   });
-// }
 
 
 </script>
