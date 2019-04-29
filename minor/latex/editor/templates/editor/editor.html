@@ -72,14 +72,12 @@ nikhil
 </div>
 
 <script type="text/javascript">
-
   var editor = ace.edit("editor");
   editor.setTheme("ace/theme/textmate");
   var session = editor.getSession();
   session.setUseWrapMode(true);
   session.setUseWorker(false);
   session.setMode("ace/mode/tex");
-
   // ace.require("ace/ext/language_tools");
 	//   var editor = ace.edit("editor");
   //     editor.setShowPrintMargin(false);
@@ -89,12 +87,6 @@ nikhil
       //   enableSnippets: true,
       //   enableLiveAutocompletion: true
       // });
-
-
-
-
-
-
 function saveContent(){
     var code =editor.getSession().getValue();
     var file_name = prompt("Please enter the file name:");
@@ -106,19 +98,14 @@ function saveContent(){
         else{ alert('Error! :('); }
     });
   }
-
-
 function newFileName(){
     var file_name = prompt("Please enter the file name:");
     var URL = "{% url 'new_file' %}";
     var data = {'name': file_name};
-
     $.post(URL, data, function(response){
       if(response === 'success'){ window.location.reload(); }
       else{ alert('Error! :('); }
     });
   }
-
-
 </script>
 {% endblock %}

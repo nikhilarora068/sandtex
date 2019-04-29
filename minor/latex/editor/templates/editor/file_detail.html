@@ -16,10 +16,10 @@ html, body {
   <div class="row">
     <ul class="actions fit">
       <li><a href="{% url 'editor_window' %}"><button class="button primary fit small" id="newfile_btn">New</button></a></li>
-      <li><a href="#"><button class="button primary fit small" id="delete_btn">Delete</button></a></li>
-      <li><a href="#"><button class="button primary fit small" id="save_btn">Save</button></a></li>
-      <li><a href="#"><button class="button primary fit small" id="compile_btn">Compile</button></a></li>
-      <li><a href="{% url 'sharing' instance.id %}"><button class="button primary fit small" onclick=init()>Share</button></a></li>
+      <li><a href="{% url 'delete_file' %}"><button class="button primary fit small" id="delete_btn">Delete</button></a></li>
+      <li><a href="{% url 'save' %}"><button class="button primary fit small" id="save_btn">Save</button></a></li>
+      <li><a href="{% url 'compile' %}"><button class="button primary fit small" id="compile_btn">Compile</button></a></li>
+      <li><a href="{% url 'sharing' instance.id %}"><button class="button primary fit small" onclick="init()"">Share</button></a></li>
     </ul>
   </div>
 
@@ -42,14 +42,14 @@ html, body {
       {% if status == 1 %}
         <iframe id="frame" src="{% static '' %}{{instance.author}}.pdf" width="100%" height="100%"></iframe>
       {% else %}
-        <iframe id="frame" src="{% static 'default.pdf'%}" width="100%" height="100%"></iframe>
+        <!-- <iframe id="frame" src="{% static 'default.pdf' %}" width="100%" height="100%"></iframe> -->
       {% endif %}
     </div>
 
   </div>
 
 </div>
-<script type="text/javascript" src="{% static 'editor.js'%}"></script>
+<script type="text/javascript" src="{% static 'editor.js' %}"></script>
 <script type="text/javascript">
   // ace.require("ace/ext/language_tools");
 	//   var editor = ace.edit("editor");
@@ -60,18 +60,12 @@ html, body {
       //   enableSnippets: true,
       //   enableLiveAutocompletion: true
       // });
-
       var editor = ace.edit("editor");
       editor.setTheme("ace/theme/textmate");
       var session = editor.getSession();
       session.setUseWrapMode(true);
       session.setUseWorker(false);
       session.setMode("ace/mode/tex");
-
-
-
-
-
 
 function saveContent(){
     var code =editor.getSession().getValue();
@@ -90,13 +84,10 @@ function saveContent(){
         saveContent();
     });
 });
-
-
 function newFileName(){
   var file_name = prompt("Please enter the file name:");
   var URL = "{% url 'new_file' %}";
   var data = {'name': file_name};
-
   $.post(URL, data, function(response){
     if(response === 'success'){ window.location.replace("{% url 'editor_window'%}"); }
     else{ alert('Error! :('); }
@@ -108,9 +99,6 @@ function newFileName(){
     newFileName();
   });
 });
-
-
-
 function compile(){
     var URL = "{% url 'compile' %}";
     $.post(URL, function(response){
@@ -131,12 +119,10 @@ function compile(){
         compile();
     });
 });
-
 function deleteFile(){
   var URL = "{% url 'delete_file' %}";
   var pk = {{instance.id}};
   var data = {'id': pk};
-
   $.post(URL, data, function(response){
       if(response === 'success'){ window.location.replace("{% url 'editor_window'%}"); }
       else{ alert('Error! :('); }
@@ -147,6 +133,5 @@ function deleteFile(){
       deleteFile();
     });
 });
-
 </script>
 {% endblock %}

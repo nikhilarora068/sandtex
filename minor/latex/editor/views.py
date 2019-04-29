@@ -44,9 +44,9 @@ def detail_view(request, pk=1):
     else:
         file_status = 0
 
-    print(all_files)
-    print(pdfname)
-    print(file_status)
+    # print(all_files)
+    # print(pdfname)
+    # print(file_status)
 
 
     destination = os.path.join(destination, pdfname)
@@ -95,7 +95,8 @@ def save_content(request):
 
         if 'name' in request.POST:
             file_name = request.POST['name']
-            File.objects.create(author=request.user, content=file_data, title=file_name)
+            if file_name is not None and file_name is not "":
+                File.objects.create(author=request.user, content=file_data, title=file_name)
             #print(f' id is = {file_id}')
             # pk = request.POST['pk']
             # print(f" pk = {pk}")
@@ -128,8 +129,9 @@ def new_file_name(request):
     if request.method == 'POST':
         if 'name' in request.POST:
             filename = request.POST['name']
-            default_content = "New file"
-            instance = File.objects.create(title=filename, content=default_content, author=request.user)
+            if filename is not None and filename is not "":
+                default_content = "New file"
+                instance = File.objects.create(title=filename, content=default_content, author=request.user)
 
             #print(filename)
         return HttpResponse('success')

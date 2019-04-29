@@ -1,4 +1,3 @@
-
 {% extends "user/base.html" %}
 {% load static %}
 {% block content %}
@@ -23,20 +22,18 @@
   <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
   <script src="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js"></script>
 
-  <link rel="stylesheet" type="text/css" href="{% static 'editor.css'%}">
+  <link rel="stylesheet" type="text/css" href="{% static 'editor.css' %}">
 </head>
 
 <body onload="init()">
 
   <!-- <div class="container-fluid h-100" >
-
     <div class="row h-100">
       <ul class="actions fit">
         <li><a href="{% url 'save' %}"><button class="button primary fit small" id="save_btn">Save</button></a></li>
         <li><a href="#"><button class="button primary fit small" id="compile_btn">Compile</button></a></li>
       </ul>
     </div>
-
     <div class="row justify-content-center h-100 text-left">
       <div class="col-1.5 h-100">
          {% for file in files %}
@@ -51,15 +48,14 @@
       <div class="col h-100" id="firepad-container"></div>
 
       <div class="col h-100">
-        <iframe id="frame" src="{% static 'default.pdf'%}" width="100%" height="100%"></iframe>
+        <iframe id="frame" src="{% static 'default.pdf' %}" width="100%" height="100%"></iframe>
       </div>
 
     <!-- </div>
-
   </div> -->
 
 
-  <script type="text/javascript" src="{% static 'editor.js'%}"></script>
+  <script type="text/javascript" src="{% static 'editor.js' %}"></script>
 </body>
 
 <script type="text/javascript">
@@ -78,9 +74,6 @@
       // session.setUseWrapMode(true);
       // session.setUseWorker(false);
       // session.setMode("ace/mode/tex");
-
-
-
 </script>
 </html>
 
