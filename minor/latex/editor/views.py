@@ -11,7 +11,7 @@ from latex import settings
 
 
 
-# @login_required
+@login_required
 def editor_window(request):
     all_user_files = File.objects.all().filter(author=request.user)
     no_of_files = len(all_user_files)
@@ -25,7 +25,7 @@ def editor_window(request):
 
 
 
-# @login_required
+@login_required
 def detail_view(request, pk=1):
     id = pk
     #print(id)
@@ -60,7 +60,7 @@ def detail_view(request, pk=1):
     return render(request, 'editor/file_detail.html', context)
 
 
-
+@login_required
 @csrf_exempt
 def sharing(request, pk=1):
     id = pk
@@ -86,12 +86,14 @@ def save_content(request):
 #        print(request.POST)
         if 'code' in request.POST:
             file_data = request.POST['code']
+            # print(file_data)
 
         if 'id' in request.POST:
             file_id = request.POST['id']
             instance  = File.objects.get(id=file_id)
             instance.content = file_data
             instance.save()
+            # print(file_id)
 
         if 'name' in request.POST:
             file_name = request.POST['name']
@@ -131,6 +133,23 @@ def new_file_name(request):
             filename = request.POST['name']
             if filename is not None and filename is not "":
                 default_content = "New file"
+                default_content = r''' \documentclass{article}
+\usepackage[utf8]{inputenc}
+\title{Galaxy}
+\date{October 2018}
+\usepackage{natbib}
+\usepackage{graphicx}
+\begin{document}
+\maketitle
+\section{Introduction}
+There is a theory which states that if ever anyone discovers exactly what the Universe is for and why it is here, it will instantly dbizarre and inexplicable.
+There is another theory which states that this has already happened.
+nikhil
+\section{Conclusion}
+ "I always thought something was fundamentally wrong with the universe" \citep{adams1995hitchhiker}
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}'''
                 instance = File.objects.create(title=filename, content=default_content, author=request.user)
 
             #print(filename)
@@ -152,7 +171,7 @@ def delete_file(request):
             #print(filename)
         return HttpResponse('success')
 
-    return HttpResponse('FAIL!!!!!')
+    # return HttpResponse('FAIL!!!!!')
 
 
 
@@ -171,11 +190,13 @@ def compile(request):
     # os.remove('static/' + str(request.user) + '.pdf')
 
     pdfname = str(request.user) + '.pdf'
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     # print(BASE_DIR)
 
-    source = BASE_DIR
-    destination = os.path.join(BASE_DIR, "static")
+    source = settings.BASE_DIR
+    print(source)
+    destination = os.path.join(settings.BASE_DIR, "static")
+    print(destination)
     shutil.move(os.path.join(source, pdfname), os.path.join(destination, pdfname))
     #shutil.move(str(request.user) + '.pdf', 'static/')
     return HttpResponse('success')

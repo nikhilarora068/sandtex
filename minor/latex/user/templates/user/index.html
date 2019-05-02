@@ -24,7 +24,11 @@
         <section>
           <div class="content">
             <header>
-              <a href="#" class="icon fa-vcard-o"><span class="label">Icon</span></a>
+              {% if user.is_authenticated %}
+                <a href="{% url 'editor_window' %}" class="icon fa-vcard-o"><span class="label">Icon</span></a>
+              {% else %}
+                <a href="{% url 'login' %}" class="icon fa-vcard-o"><span class="label">Icon</span></a>
+              {% endif %}
               <h3>Online collaboration</h3>
             </header>
             <!-- <p>Nunc lacinia ante nunc ac lobortis ipsum. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus.</p> -->
@@ -33,7 +37,11 @@
         <section>
           <div class="content">
             <header>
-              <a href="#" class="icon fa-files-o"><span class="label">Icon</span></a>
+              {% if user.is_authenticated %}
+                <a href="{% url 'editor_window' %}" class="icon fa-files-o"><span class="label">Icon</span></a>
+              {% else %}
+                <a href="{% url 'login' %}" class="icon fa-files-o"><span class="label">Icon</span></a>
+              {% endif %}
               <h3>PDF Generation</h3>
             </header>
             <!-- <p>Nunc lacinia ante nunc ac lobortis ipsum. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus.</p> -->
@@ -42,7 +50,11 @@
         <section>
           <div class="content">
             <header>
-              <a href="#" class="icon fa-floppy-o"><span class="label">Icon</span></a>
+              {% if user.is_authenticated %}
+                <a href="{% url 'editor_window' %}" class="icon fa-floppy-o"><span class="label">Icon</span></a>
+              {% else %}
+                <a href="{% url 'login' %}" class="icon fa-floppy-o"><span class="label">Icon</span></a>
+              {% endif %}
               <h3>Real-time Sharing</h3>
             </header>
             <!-- <p>Nunc lacinia ante nunc ac lobortis ipsum. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus.</p> -->
@@ -51,7 +63,11 @@
         <section>
           <div class="content">
             <header>
-              <a href="#" class="icon fa-line-chart"><span class="label">Icon</span></a>
+              {% if user.is_authenticated %}
+                <a href="{% url 'editor_window' %}" class="icon fa-line-chart"><span class="label">Icon</span></a>
+              {% else %}
+                <a href="{% url 'login' %}" class="icon fa-line-chart"><span class="label">Icon</span></a>
+              {% endif %}
               <h3>LaTex Editor</h3>
             </header>
             <!-- <p>Nunc lacinia ante nunc ac lobortis ipsum. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus.</p> -->
@@ -148,7 +164,7 @@
             <li><a href="#">Nikhil Arora</a></li>
             <li><a href="#">Divyansh Srivastava</a></li>
             <li><a href="#">Samanyu Srivastava</a></li>
-            <li><a href="#">Divyansh Srivastava</a></li>
+            <li><a href="#">Abhishek Mittal</a></li>
           </ul>
         </section>
         <section>

@@ -6,6 +6,16 @@ html, body {
   height: 100%;
   margin: 0;
 }
+a:link {
+  text-decoration: none;
+}
+
+a.ex1:hover, a.ex1:active {
+  background: red;
+  font-size: 150%;
+ }
+
+
 </style>
 
 
@@ -25,10 +35,10 @@ html, body {
   </div>
     {% if count %}
       <div class="row justify-content-center h-100 text-left">
-        <div class="col justify-content-center w-100">
+        <div class=" justify-content-center w-100">
            {% for file in all_files %}
              <ul class="actions">
-                  <li><a href="{% url 'detail' file.id %}" ><strong>{{ file.title }}</strong></a></li>
+                  <li><div class="row"><a href="{% url 'detail' file.id %}" class="ex1"><strong>{{ file.title }}</strong></a></div></li>
              </ul>
            {% endfor %}
         </div>
@@ -72,12 +82,18 @@ nikhil
 </div>
 
 <script type="text/javascript">
+  ace.require("ace/ext/language_tools");
   var editor = ace.edit("editor");
   editor.setTheme("ace/theme/textmate");
   var session = editor.getSession();
   session.setUseWrapMode(true);
   session.setUseWorker(false);
   session.setMode("ace/mode/tex");
+  editor.setOptions({
+    enableBasicAutocompletion: true,
+    enableSnippets: true,
+    enableLiveAutocompletion: true
+  });
   // ace.require("ace/ext/language_tools");
 	//   var editor = ace.edit("editor");
   //     editor.setShowPrintMargin(false);
