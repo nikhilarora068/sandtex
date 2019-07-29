@@ -60,7 +60,7 @@ def detail_view(request, pk=1):
     return render(request, 'editor/file_detail.html', context)
 
 
-@login_required
+# @login_required
 @csrf_exempt
 def sharing(request, pk=1):
     id = pk
